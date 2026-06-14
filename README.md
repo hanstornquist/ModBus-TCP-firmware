@@ -1,5 +1,5 @@
 <!-- This file is the template for the PUBLIC firmware repo's README. The release
-     workflow substitutes 0.5.3 and appends CHANGELOG.md, then pushes the
+     workflow substitutes 0.6.0 and appends CHANGELOG.md, then pushes the
      result to hanstornquist/ModBus-TCP-firmware. Edit it here, not there. -->
 # ModBus TCP Gateway — firmware distribution
 
@@ -13,12 +13,19 @@ verbatim onto an RS-485 (Modbus RTU) bus, relaying each device's own reply — n
 device map, register mirror, or polling. It is built for Node-RED reading e.g.
 SDM630 power meters.
 
-## Current release: **v0.5.3**
+## Current release: **v0.6.0**
 
 | File | Purpose |
 | --- | --- |
 | [`version.json`](version.json) | Manifest the gateway polls (`version`, `code`, `bin`) |
 | [`ModBus_TCP_Gateway.bin`](ModBus_TCP_Gateway.bin) | Compiled firmware image |
+| [`flash/`](flash/) | Browser-based flasher (full-flash image + ESP Web Tools page) |
+
+## Flash a board from your browser
+
+To program a **blank or factory-reset board**, open the **[web flasher](flash/)**
+in Chrome or Edge on a desktop, connect the board over USB, and click Install.
+It writes the full firmware image over Web Serial — no tools to download.
 
 ## How updates reach a gateway
 
@@ -38,6 +45,22 @@ version tag — this repo (binary, manifest, and this README) is fully generated
 All notable changes to the ModBus TCP Gateway firmware. This file is the single
 source of truth; the release Action publishes it into the public firmware repo's
 README on every tagged release.
+
+## v0.6.0 — branded UI, signed-only updates, web flasher
+- **Redesigned web portal:** a dark, card-based interface matching the SkillShot
+  look — the logotype in the header (and as the browser tab icon), a connection
+  status pill, an orange brand accent, and a footer. Mobile-friendly; fully
+  self-contained so the setup-AP portal still works with no internet.
+- **Signed-only updates by default:** the manual (unsigned) firmware-upload
+  endpoint is now gated behind a build flag and is **off in released builds**, so
+  a unit accepts only cryptographically signed over-the-air updates — an admin
+  password alone can no longer flash arbitrary firmware.
+- **Browser-based flasher:** program a blank or factory-reset board over USB
+  straight from Chrome/Edge (Web Serial), no tools to install — published
+  alongside each release.
+- Internal: the firmware source was split from one large file into themed modules
+  (no behaviour change); fixed a stray redirect to `0.0.0.0` from unknown-URL
+  probes (e.g. the browser's favicon request) once the gateway is on Wi-Fi.
 
 ## v0.5.3 — setup UX & factory aids
 - Setup-AP mode prints the device password in the serial heartbeat so the factory
