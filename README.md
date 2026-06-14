@@ -1,5 +1,5 @@
 <!-- This file is the template for the PUBLIC firmware repo's README. The release
-     workflow substitutes 0.4.1 and appends CHANGELOG.md, then pushes the
+     workflow substitutes 0.5.1 and appends CHANGELOG.md, then pushes the
      result to hanstornquist/ModBus-TCP-firmware. Edit it here, not there. -->
 # ModBus TCP Gateway — firmware distribution
 
@@ -13,7 +13,7 @@ verbatim onto an RS-485 (Modbus RTU) bus, relaying each device's own reply — n
 device map, register mirror, or polling. It is built for Node-RED reading e.g.
 SDM630 power meters.
 
-## Current release: **v0.4.1**
+## Current release: **v0.5.1**
 
 | File | Purpose |
 | --- | --- |
@@ -38,6 +38,19 @@ version tag — this repo (binary, manifest, and this README) is fully generated
 All notable changes to the ModBus TCP Gateway firmware. This file is the single
 source of truth; the release Action publishes it into the public firmware repo's
 README on every tagged release.
+
+## v0.5.0 — security & reliability hardening
+- **Signed updates:** the device verifies an ECDSA-P256 signature over each pulled
+  image against a baked-in public key before flashing; CI signs every release with
+  the private key. A tampered binary or a compromised public repo/token is rejected.
+- **Unique per-device password:** public builds generate a random admin password on
+  first boot (logged once over serial for labelling) instead of a universal default;
+  it gates the web portal, OTA push, and the setup-AP Wi-Fi.
+- **Authenticated portal:** config/update endpoints require the admin password once
+  the device is on Wi-Fi (the setup AP stays open, gated by its unique Wi-Fi password).
+- **Reliable self-update:** a found update is downloaded early on the next boot (fresh
+  heap) instead of after uptime, fixing TLS/OTA allocation failures.
+- **Hardware watchdog:** a hung main loop now auto-reboots.
 
 ## v0.4.1
 - Device secrets (Wi-Fi credentials, OTA-push password) are seeded into NVS on a
