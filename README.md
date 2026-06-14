@@ -1,5 +1,5 @@
 <!-- This file is the template for the PUBLIC firmware repo's README. The release
-     workflow substitutes 0.5.1 and appends CHANGELOG.md, then pushes the
+     workflow substitutes 0.5.2 and appends CHANGELOG.md, then pushes the
      result to hanstornquist/ModBus-TCP-firmware. Edit it here, not there. -->
 # ModBus TCP Gateway — firmware distribution
 
@@ -13,7 +13,7 @@ verbatim onto an RS-485 (Modbus RTU) bus, relaying each device's own reply — n
 device map, register mirror, or polling. It is built for Node-RED reading e.g.
 SDM630 power meters.
 
-## Current release: **v0.5.1**
+## Current release: **v0.5.2**
 
 | File | Purpose |
 | --- | --- |
@@ -38,6 +38,13 @@ version tag — this repo (binary, manifest, and this README) is fully generated
 All notable changes to the ModBus TCP Gateway firmware. This file is the single
 source of truth; the release Action publishes it into the public firmware repo's
 README on every tagged release.
+
+## v0.5.2 — Wi-Fi robustness
+- Network scanning now runs **only in setup (AP) mode**; on the single-radio S2 a
+  scan while connected could wedge the radio and drop the unit off the network.
+- **Wi-Fi self-heal:** if a previously-working link stays down past a threshold
+  (3 min), the gateway hard-resets (RTC) to recover a wedged radio instead of
+  retrying forever — no power-cycle/site visit needed.
 
 ## v0.5.0 — security & reliability hardening
 - **Signed updates:** the device verifies an ECDSA-P256 signature over each pulled
